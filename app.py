@@ -6,15 +6,13 @@ import pickle
 model = pickle.load(open("food_model.pkl","rb"))
 scaler = pickle.load(open("scaler.pkl","rb"))
 
-# Load dataset to get correct column order
+# Load dataset to get column order
 df = pd.read_csv("cleaned_food_dataset.csv")
-
-# Get training feature columns
 feature_columns = df.drop(['Calories (kcal)','Dish Name','Carbohydrates (g)'],axis=1).columns
 
 st.title("🍲 Indian Food Nutrition Predictor")
 
-# User Inputs
+# Inputs
 protein = st.number_input("Protein (g)",0.0)
 fats = st.number_input("Fats (g)",0.0)
 fibre = st.number_input("Fibre (g)",0.0)
@@ -25,7 +23,7 @@ sodium = st.number_input("Sodium (mg)",0.0)
 vitamin_c = st.number_input("Vitamin C (mg)",0.0)
 folate = st.number_input("Folate (µg)",0.0)
 
-# Create input dictionary
+# Create input
 input_dict = {
     'Protein (g)':protein,
     'Fats (g)':fats,
@@ -38,16 +36,11 @@ input_dict = {
     'Folate (µg)':folate
 }
 
-# Convert to DataFrame
 input_data = pd.DataFrame([input_dict])
-
-# Reorder columns to match training data
 input_data = input_data[feature_columns]
-
-# Scale
-scaled_data = scaler.transform(input_data)
 
 # Predict
 if st.button("Predict"):
+    scaled_data = scaler.transform(input_data)
     prediction = model.predict(scaled_data)
     st.success(f"Carbohydrate Level: {prediction[0]}")
