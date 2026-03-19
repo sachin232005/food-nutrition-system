@@ -101,6 +101,7 @@ if st.button("Predict"):
         st.success(f"Carbohydrate Level: {prediction[0]}")
 
     except Exception as e:
+        conn.rollback() 
         st.error(f"Error: {e}")
 
 # -------------------------------
